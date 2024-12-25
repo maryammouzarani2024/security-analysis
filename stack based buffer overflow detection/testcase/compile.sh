@@ -1,0 +1,4 @@
+gcc -O0  -Wall -c -fmessage-length=0 -MMD -MP -MF"CWE121_Stack_Based_Buffer_Overflow__CWE193_char_declare_ncpy_51a.d" -MT"CWE121_Stack_Based_Buffer_Overflow__CWE193_char_declare_ncpy_51a.d" -o "CWE121_Stack_Based_Buffer_Overflow__CWE193_char_declare_ncpy_51a.o" "CWE121_Stack_Based_Buffer_Overflow__CWE193_char_declare_ncpy_51a.c"
+gcc -O0  -Wall -c -fmessage-length=0 -MMD -MP -MF"CWE121_Stack_Based_Buffer_Overflow__CWE193_char_declare_ncpy_51b.d" -MT"CWE121_Stack_Based_Buffer_Overflow__CWE193_char_declare_ncpy_51b.d" -o "CWE121_Stack_Based_Buffer_Overflow__CWE193_char_declare_ncpy_51b.o" "CWE121_Stack_Based_Buffer_Overflow__CWE193_char_declare_ncpy_51b.c"
+gcc -O0  -Wall -c -fmessage-length=0 -MMD -MP -MF"io.d" -MT"io.d" -o "io.o" "io.c"
+gcc  -o "test.exe"  ./CWE121_Stack_Based_Buffer_Overflow__CWE193_char_declare_ncpy_51a.o CWE121_Stack_Based_Buffer_Overflow__CWE193_char_declare_ncpy_51b.o ./io.o   

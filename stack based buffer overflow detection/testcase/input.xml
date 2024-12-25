@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+  <TagA>
+    <TagB>
+      <File Folder="FOLDER1M\1" File="R1.txt" />
+    </TagB>
+    <TagB>
+      <File Folder="FOLDER1M\2" File="R2.txt" />
+    </TagB>
+    <TagB>
+      <File Folder="FOLDER2M\1" File="R3.txt" />
+    </TagB>
+  </TagA>
