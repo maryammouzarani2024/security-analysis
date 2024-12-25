@@ -1,8 +1,9 @@
-pathgrind
+new pathgrind, Guided Stack Overflow Detecting Fuzzer
 =========
+This is a revision of pathgrind at https://github.com/dpc-grindland/Fuzzgrind. 
+In the new version a static analysis is first performed to locate stack copy operations, estimate the stack buffer length and then, pathgrid is used to fuzz the execution paths containing these operations and calculates the path and vulnerability constraints and create appropriate input data to cause an overflow. 
 
-Path based Dynamic Analysis
-(Works for 32-bit programs only)
+More details are available at the article "Smart fuzzing method for detecting stack-based buffer overflow in binary codes", https://ietresearch.onlinelibrary.wiley.com/doi/full/10.1049/iet-sen.2015.0039
 
 Requirements
 ------------
