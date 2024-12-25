@@ -1,2 +1,0 @@
-Faulty inputs for program /usr/local/bin/swfdump are in the fallowing files: 
-Paths Explored: 0 Feasible Paths: 0 Total Constraints: 0 Actual Constraints: 0 Time Taken: 0.0 Valgrind Time: 0.0 
