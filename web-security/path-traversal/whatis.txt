@@ -1,6 +1,0 @@
-Path traversal or directory traversal.
-It enables an attacker to read arbitrary files on the server that is running an application.
-
-sample attack pattern:
-
-https://insecure-website.com/loadImage?filename=..\..\..\windows\win.ini
