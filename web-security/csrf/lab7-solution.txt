@@ -1,0 +1,30 @@
+Lab #7:  SameSite Lax bypass via method override
+
+Target: change the viewer's email address
+
+
+This lab's email change functionality is vulnerable to CSRF. 
+It uses tokens to try to prevent CSRF attacks, but they aren't fully integrated into the site's session handling system.
+
+Hint: 
+   
+    To solve the lab, craft some HTML that uses a CSRF attack to change the viewer's email address and upload it to your exploit server.
+
+    You can log in to your own account using the following credentials: wiener:peter
+
+
+Analysis:
+
+  CSRF attack could be possible, when:
+    - There is a relevant action
+    - There is cookie-based session handling
+    - No unpredictable request parameter is required
+
+  There is no csrf token in  the request, but the cookie setting does not allow the post request in the attack script to work. 
+  Lets test if it is possible to change the change_email request into get:
+
+  changing the request to get at burpsuit does not help. But we can use get request and add _method=post to the request to decieve the browser:
+
+<script>
+    document.location = "https://myPOrtSwiggerID.web-security-academy.net/my-account/change-email?email=pwned@web-security-academy.net&_method=POST";
+</script>

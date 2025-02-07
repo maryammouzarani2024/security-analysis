@@ -1,0 +1,14 @@
+Lab #9: SameSite Strict bypass via sibling domain
+
+Target:  log in to the victim's account
+
+This lab's live chat feature is vulnerable to cross-site WebSocket hijacking (CSWSH).
+
+Hint:
+
+To do this, use the provided exploit server to perform a CSWSH attack that exfiltrates the victim's chat history to the default Burp Collaborator server. 
+The chat history contains the login credentials in plain text.
+
+
+Analysis:
+   skip for Nowadays

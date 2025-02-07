@@ -1,0 +1,48 @@
+basic-1:
+https://www.hackthissite.org/missions/basic/1/
+
+Solution: password is hardcoded in the html text.
+
+basic-2:
+https://www.hackthissite.org/missions/basic/2/
+
+Challenge:
+Network Security Sam set up a password protection script. He made it load the real password from an unencrypted text file and compare it to the password the user enters. However, he neglected to upload the password file...
+
+Solution:
+When there is no password file, the script compares password with nothing. So an empty password passes the verification.
+
+
+Basic-3:
+https://www.hackthissite.org/missions/basic/3/
+
+Challenge: 
+There is a password file to compare user passwords with.
+
+Solution:
+the password file name is hardcoded and given as an input arguments.
+We can remove the file name and enter empty password. 
+We can also open https://www.hackthissite.org/missions/basic/3/password.php  and read the password.
+
+ <input type="hidden" name="file" value="password.php" />
+
+
+Basic-4:
+
+Challenge:
+This time Sam hardcoded the password into the script. 
+However, the password is long and complex, and Sam is often forgetful. So he wrote a script that would email his password to him automatically in case he forgot.
+
+
+Solution:
+
+Sam's email address is an input parameter to the script:
+<form action="/missions/basic/4/level4.php" method="post">
+    <input type="hidden" name="to" value="sam@hackthissite.org" /><input type="submit" value="Send password to Sam" /></form>
+
+
+Just change the email address in the post request to recieve the password yourself.
+
+
+
+

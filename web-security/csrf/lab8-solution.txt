@@ -1,0 +1,32 @@
+Lab #8:SameSite Strict bypass via client-side redirect
+
+Target: change the viewer's email address
+
+
+This lab's email change functionality is vulnerable to CSRF. 
+It does not use any csrf token, but applies samesite=strict restriction to the session cookie.
+
+
+Analysis:
+
+  CSRF attack could be possible, when:
+    - There is a relevant action
+    - There is cookie-based session handling
+    - No unpredictable request parameter is required
+
+  There is no csrf token in  the request, but the cookie setting does not allow the post request in the attack script to work. 
+ 
+  Check the response of login post request to find the samesite=strict setting.
+
+  Then, search for a redirection possibility:
+  In posting a comment there is an automated redirection to the post after confirmation of the comment:
+  /post/comment/confirmation?postId=11
+
+it is possible to load my-account page using this redirection:
+
+/post/comment/confirmation?postId=../../../my-account
+
+So, here we go:
+ <script>
+            document.location = "https://myPOrtSwiggerID.web-security-academy.net/post/comment/confirmation?postId=../../../my-account/change-email?email=pwned@web-security-academy.net%26submit=1";
+   </script>
