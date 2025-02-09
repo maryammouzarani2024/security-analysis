@@ -1,0 +1,17 @@
+Lab #2: SQL injection vulnerability allowing login bypass
+
+
+
+Target:
+  perform a SQL injection attack that logs in to the application as the administrator user.
+Hint: 
+    This lab contains a SQL injection vulnerability in the login function.
+
+
+Solution:
+
+  The username parameter in the login page is vulnerable to sql injection.
+
+  attack pattern :
+    using burpsuit and modifying the username post request parameter, or directly in the web browser:
+    username=administrator'--

